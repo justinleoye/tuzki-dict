@@ -204,6 +204,7 @@ function setSelectedText(){
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs,text){
         var tab = tabs[0];
         //console.log("tab_id:",tab.id);
+        // 与页面进行通信 
         chrome.tabs.sendRequest(tab.id,{greeting: "hello,J"},function(response,text){
             //console.log("response>>",response);
             if(response.selectedText){
