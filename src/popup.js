@@ -6,7 +6,7 @@ $(document).ready(function(){
     setSelectedText();
 
     $('form[name=query]').submit(function(){
-        //console.log("form submit!");
+        console.log("form submit!");
 
         // trig the blur event of the input[name=q],so that can commit the input[name=q] blur callback function
         $('input[name=q]').trigger("blur");
@@ -16,111 +16,144 @@ $(document).ready(function(){
             return false;
         }
 
+        // 查询单词
+        query_words(q,handle_success,function(){
+            // TODO:出现网络错误时的处理
+        });
+
         //do for better user experience
         $("#query-result").empty();
+        // 禁用查询按钮，以免用户失误多次点击
         $('button[name=querysubmit]').attr("disabled","disabled");
 
+        // 对于表单的submit事件，必须要在最后返回一个false，否则页面会发生提交而发生重载
+        return false;
+    });
 
-        //console.log('q=',q);
+    // 查词
+    function query_words(q,success,error){
+        console.log('q=',q);
         var url = 'http://fanyi.youdao.com/openapi.do?keyfrom=Justin&key=2064817359&type=data&doctype=json&version=1.1&q='+ q;
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url, true);
         xhr.onreadystatechange = function() {
             if(xhr.readyState == 4){
-
                 var resultJSON = JSON.parse(xhr.responseText);
-                //console.log(resultJSON.translation[0]);
+                console.log(resultJSON.translation[0]);
                 if(resultJSON.errorCode == 0){
-                    //Create the DOM tree
-                    var head_youdao = document.createElement("h4");
-                    head_youdao.setAttribute("class","alert alert-info");
-                    head_youdao.innerHTML = "有道词典释义";
-                    var q_translation = null;
-                    if(resultJSON.translation){
-                        q_translation = document.createElement("div");
-                        q_translation.innerHTML = '<h5>' + getTextFromList(resultJSON.translation) + '</h5>';
-                    }
-
-                    var q_basic = document.createElement("div");
-                    q_basic.setAttribute("class","q-basic");
-
-                    if(resultJSON.basic){
-                        var q_basic_head = document.createElement("h5");
-                        q_basic_head.innerHTML = "基本释义";
-
-                        var q_phonetic = null;
-                        if(resultJSON.basic.phonetic){
-                            q_phonetic = document.createElement("div");
-                            q_phonetic.setAttribute("class","q-phonetic");
-                            q_phonetic.innerHTML = '读音-[<em>'+resultJSON.basic.phonetic+'</em>]';
-                        }
-                        var q_explains = null;
-                        if(resultJSON.basic.explains){
-                            q_explains = document.createElement("div");
-                            q_explains.setAttribute("class","q-explains");
-                            q_explains.innerHTML = getTextFromList(resultJSON.basic.explains);
-                        }
-                        q_basic.appendChild(q_basic_head);
-                        if(q_phonetic != null) q_basic.appendChild(q_phonetic);
-                        if(q_explains != null) q_basic.appendChild(q_explains);
-                    }else{
-                        q_basic.innerHTML = '<h5><em>基本释义未找到！抱歉了，::>_<::</em></h5>';
-                    }
-                    var q_web = null;
-                    if(resultJSON.web){
-                        q_web = document.createElement("div");
-                        q_web.setAttribute("class","q-web");
-                        var head_web = document.createElement("h4");
-                        head_web.setAttribute("class","alert alert-info");
-                        head_web.innerHTML = "网络释义";
-
-                        var q_web_basic = null;
-                        var q_web_phrases=null;
-                        if(resultJSON.web.length > 1){
-                            q_web_phrases = document.createElement("div");
-                            q_web_phrases.setAttribute("class","q-web-phrases");
-                            var h5 = document.createElement("h5");
-                            h5.innerHTML = "网络短语";
-                            q_web_phrases.appendChild(h5);
-                        }
-                        for(var i=0; i < resultJSON.web.length;i++){
-                            if(i==0){
-                                q_web_basic = document.createElement("div");
-                                q_web_basic.setAttribute("class","q-web-basic");
-                                q_web_basic.innerHTML = getTextFromList(resultJSON.web[i].value);
-                            }else{
-                                var q_web_phrase = document.createElement("div");
-                                q_web_phrase.setAttribute("class","q-web-phrase");
-                                q_web_phrase.innerHTML = resultJSON.web[i].key + " : " +getTextFromList(resultJSON.web[i].value);
-                                q_web_phrases.appendChild(q_web_phrase);
-                            }
-                        }
-                        q_web.appendChild(head_web);
-                        if(q_web_basic != null){
-                            q_web.appendChild(q_web_basic);
-                        }
-                        if(q_web_phrases != null){
-                            q_web.appendChild(q_web_phrases);
-                        }
-
-                    }
-
-                    var query_result = document.getElementById("query-result");
-                    query_result.appendChild(head_youdao);
-                    if(q_translation != null) query_result.appendChild(q_translation);
-                    query_result.appendChild(q_basic);
-                    if(q_web != null){
-                        query_result.appendChild(q_web);
-                    }
+                    handle_success(resultJSON);
                 }
                 $('button[name=querysubmit]').removeAttr("disabled");
             }
-
         };
         xhr.send();
         return false;
-    });
+    };
 
+    // 查词网络正确返回时，处理数据
+    function handle_success(resultJSON){
+        //Create the DOM tree
+        var head_youdao = document.createElement("h4");
+        head_youdao.setAttribute("class","alert alert-info");
+        head_youdao.innerHTML = "有道词典释义";
+
+        var q_translation = create_youdao_translation_element(resultJSON);
+        var q_basic = create_youdao_basic_element(resultJSON);
+        var q_web = create_web_translation_element(resultJSON);
+        
+        // 将DOM结点插入DOM树
+        var query_result = document.getElementById("query-result");
+        query_result.appendChild(head_youdao);
+        if(q_translation != null) query_result.appendChild(q_translation);
+        query_result.appendChild(q_basic);
+        if(q_web != null){
+            query_result.appendChild(q_web);
+        }
+    };
+
+    // 显示有道释义
+    function create_youdao_translation_element(resultJSON){
+        var q_translation = null;
+        if(resultJSON.translation){
+            q_translation = document.createElement("div");
+            q_translation.innerHTML = '<h5>' + getTextFromList(resultJSON.translation) + '</h5>';
+        }
+        return q_translation;
+    };
+    
+    // 显示有道释义 基本释义
+    function create_youdao_basic_element(resultJSON){
+        var q_basic = document.createElement("div");
+        q_basic.setAttribute("class","q-basic");
+
+        if(resultJSON.basic){
+            var q_basic_head = document.createElement("h5");
+            q_basic_head.innerHTML = "基本释义";
+
+            var q_phonetic = null;
+            if(resultJSON.basic.phonetic){
+                q_phonetic = document.createElement("div");
+                q_phonetic.setAttribute("class","q-phonetic");
+                q_phonetic.innerHTML = '读音-[<em>'+resultJSON.basic.phonetic+'</em>]';
+            }
+            var q_explains = null;
+            if(resultJSON.basic.explains){
+                q_explains = document.createElement("div");
+                q_explains.setAttribute("class","q-explains");
+                q_explains.innerHTML = getTextFromList(resultJSON.basic.explains);
+            }
+            q_basic.appendChild(q_basic_head);
+            if(q_phonetic != null) q_basic.appendChild(q_phonetic);
+            if(q_explains != null) q_basic.appendChild(q_explains);
+        }else{
+            q_basic.innerHTML = '<h5><em>基本释义未找到！抱歉了，::>_<::</em></h5>';
+        }
+        return q_basic;
+    };
+    
+    // 显示网络释义
+    function create_web_translation_element(resultJSON){
+        var q_web = null;
+        if(resultJSON.web){
+            q_web = document.createElement("div");
+            q_web.setAttribute("class","q-web");
+            var head_web = document.createElement("h4");
+            head_web.setAttribute("class","alert alert-info");
+            head_web.innerHTML = "网络释义";
+
+            var q_web_basic = null;
+            var q_web_phrases=null;
+            if(resultJSON.web.length > 1){
+                q_web_phrases = document.createElement("div");
+                q_web_phrases.setAttribute("class","q-web-phrases");
+                var h5 = document.createElement("h5");
+                h5.innerHTML = "网络短语";
+                q_web_phrases.appendChild(h5);
+            }
+            for(var i=0; i < resultJSON.web.length;i++){
+                if(i==0){
+                    q_web_basic = document.createElement("div");
+                    q_web_basic.setAttribute("class","q-web-basic");
+                    q_web_basic.innerHTML = getTextFromList(resultJSON.web[i].value);
+                }else{
+                    var q_web_phrase = document.createElement("div");
+                    q_web_phrase.setAttribute("class","q-web-phrase");
+                    q_web_phrase.innerHTML = resultJSON.web[i].key + " : " +getTextFromList(resultJSON.web[i].value);
+                    q_web_phrases.appendChild(q_web_phrase);
+                }
+            }
+            q_web.appendChild(head_web);
+            if(q_web_basic != null){
+                q_web.appendChild(q_web_basic);
+            }
+            if(q_web_phrases != null){
+                q_web.appendChild(q_web_phrases);
+            }
+
+        }
+        return q_web;
+    };
+    
     /*
      *store the word to the server db
      *
@@ -209,9 +242,9 @@ function setSelectedText(){
             //console.log("response>>",response);
             if(response.selectedText){
                 var text = response.selectedText
-                //console.log("Response:",text);
+                console.log("Response:",text);
                 $('input[name=q]').attr("value",text);
-                //console.log("selectedText>:",text);
+                console.log("selectedText>:",text);
                 $('form[name=query]').trigger("submit");
             }
             //console.log("return here1");

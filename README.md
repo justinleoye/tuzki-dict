@@ -1,7 +1,7 @@
-# tuzki-dict
+tuzki-dict
 ===
 
-## references
+references
 ---
 
 
@@ -15,6 +15,9 @@
 ### Chrome插件开发文档：
 * <a href="http://open.chrome.360.cn/extension_dev/overview.html" target="_blank">360开放平台（中文）</a>
 * <a href="https://developer.chrome.com/extensions" target="_blank">chrome官方文档</a>
+
+### jQuery文档:
+* <a href="http://hemin.cn/jq/cheatsheet.html" target="_blank">jQuery中文文档</a>
 
 ## tasks and goals
 ---
