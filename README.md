@@ -29,6 +29,25 @@ references
 * BootStrap前端框架
 * 学习使用版本控制系统 git
 
+#### workflow:(<a href="http://v3.bootcss.com/" target="_blank">中文网站</a>)
+下面的网页如果是英文，那么你可以去<a href="http://v3.bootcss.com/" target="_blank">中文网站</a>找对应部分看
+
+1. Download manually <a href="http://getbootstrap.com/getting-started#download" target="_blank">下载bootstrap</a>
+2. basic template <a href="http://getbootstrap.com/getting-started/#template" target="_blank">basic template</a>
+3. try examples 
+   * <a href="http://getbootstrap.com/examples/starter-template/" target="_blank">Starter template</a>
+   * （看完下面4、5再做）<a href="http://getbootstrap.com/examples/jumbotron/" target="_blank">Jumbotron</a>
+4. BootStrap css <a href="http://v3.bootcss.com/css/" target="_blank">全局css样式</a>
+   * 布局容器
+   * 栅格系统
+   * 排版
+   * 表格
+   * 表单
+   * 按钮
+5. components <a href="http://v3.bootcss.com/components/" target="_blank">组件</a>
+   * Glyphicons 字体图标
+
+
 ### stage 2 -- 自动化，专业化
 用自动构建工具和包管理工具
 
