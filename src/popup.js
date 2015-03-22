@@ -5,7 +5,7 @@ $(document).ready(function(){
     //get and set the selected text of the active page
     setSelectedText();
 
-    $('form[name=query]').submit(function(){
+    $('button[name=querysubmit]').click(function(){
         console.log("form submit!");
 
         // trig the blur event of the input[name=q],so that can commit the input[name=q] blur callback function
