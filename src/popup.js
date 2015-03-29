@@ -9,7 +9,7 @@ $(document).ready(function(){
         console.log("form submit!");
 
         // trig the blur event of the input[name=q],so that can commit the input[name=q] blur callback function
-        $('input[name=q]').trigger("blur");
+        $('input[name=q]').trigger("blur");//Q:....blur?
         var q = $('input[name=q]').val();
         // q should not be none
         if(q == '' || q == null){
@@ -43,7 +43,8 @@ $(document).ready(function(){
                 if(resultJSON.errorCode == 0){
                     handle_success(resultJSON);
                 }
-                $('button[name=querysubmit]').removeAttr("disabled");
+
+                $('button[name=querysubmit]').removeAttr("disabled");//解禁
             }
         };
         xhr.send();
@@ -57,7 +58,7 @@ $(document).ready(function(){
         head_youdao.setAttribute("class","alert alert-info");
         head_youdao.innerHTML = "有道词典释义";
 
-        var q_translation = create_youdao_translation_element(resultJSON);
+        var q_translation = create_youdao_translation_element(resultJSON);//Q:靠一個變量可以區分？
         var q_basic = create_youdao_basic_element(resultJSON);
         var q_web = create_web_translation_element(resultJSON);
         
@@ -164,7 +165,8 @@ $(document).ready(function(){
         var word = $('input[name=word]').val();
         if(q != word){
             $('button[name=storesubmit]').removeAttr("disabled");
-            $('button[name=storesubmit] i').attr("class","icon-pencil");
+            //$('button[name=storesubmit] i').attr("class","icon-pencil");
+            $('button[name=storesubmit] span').attr("class","glyphicon glyphicon-pencil"); //zz
         }
         $('input[name=word]').attr("value",q);//set the word to the store form
     });
@@ -181,7 +183,8 @@ $(document).ready(function(){
             $('button[name=storesubmit]').attr("disabled","disabled");
             $('button[name=storesubmit] div[class=tooltip-inner]').empty();
             $('button[name=storesubmit] div[class=tooltip-inner]').append("正在写入单词本");
-            $('button[name=storesubmit] i').attr("class","icon-time");
+            //$('button[name=storesubmit] i').attr("class","icon-time");
+            $('button[name=storesubmit] span').attr("class","glyphicon glyphicon-time");
             var url = 'http://yeyuan.sinaapp.com/tuzki';
             //var url = "http://localhost:8080/tuzki"
             var xhr = new XMLHttpRequest();
@@ -196,15 +199,18 @@ $(document).ready(function(){
                     if(result.code == '0' || result.code == '1'){
                         $('button[name=storesubmit] div[class=tooltip-inner]').empty();
                         $('button[name=storesubmit] div[class=tooltip-inner]').append("已存入，共存入"+result.count+"次");
-                        $('button[name=storesubmit] i').attr("class","icon-ok");
+                        //$('button[name=storesubmit] i').attr("class","icon-ok");
+                        $('button[name=storesubmit] span').attr("class","glyphicon glyphicon-ok");
                     }else if(result.code == '3'){
                         $('button[name=storesubmit] div[class=tooltip-inner]').empty();
                         $('button[name=storesubmit] div[class=tooltip-inner]').append("哎哟，你还没登录啦！");
-                        $('button[name=storesubmit] i').attr("class","icon-ban-circle");
+                        //$('button[name=storesubmit] i').attr("class","icon-ban-circle");
+                        $('button[name=storesubmit] span').attr("class","glyphicon glyphicon-circle");
                     }else{
                         $('button[name=storesubmit] div[class=tooltip-inner]').empty();
                         $('button[name=storesubmit] div[class=tooltip-inner]').append("哎哟，你还没登录啦！");
-                        $('button[name=storesubmit] i').attr("class","icon-question-sign");
+                        //$('button[name=storesubmit] i').attr("class","icon-question-sign");
+                        $('button[name=storesubmit] span').attr("class","glyphicon glyphicon-sign");
                     }
                 }
             };
@@ -233,19 +239,20 @@ function getTextFromList(list){
     return text;
 }
 
+//Q:....
 function setSelectedText(){
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs,text){
         var tab = tabs[0];
         //console.log("tab_id:",tab.id);
         // 与页面进行通信 
-        chrome.tabs.sendRequest(tab.id,{greeting: "hello,J"},function(response,text){
+        chrome.tabs.sendRequest(tab.id,{greeting: "hello,J"},function(response,text){//Q:{greeting: "hello,J"}??
             //console.log("response>>",response);
             if(response.selectedText){
                 var text = response.selectedText
                 console.log("Response:",text);
-                $('input[name=q]').attr("value",text);
+                $('input[name=q]').attr("value",text);//屬性value的值變為text
                 console.log("selectedText>:",text);
-                $('form[name=query]').trigger("submit");
+                $('form[name=query]').trigger("submit");//觸發submitQ:為何還能觸發 這個form已經沒有了？？
             }
             //console.log("return here1");
             //return true;
@@ -268,26 +275,28 @@ function getCookie(domain, name, callback){
     });
 }
 
-
+//Q:'True' '10' '13'
 function checkLogin(){
     // get the cookie of the domain of the server
     var domain = "http://yeyuan.sinaapp.com";
     //var domain = "http://localhost:8080";
     var url = domain + "/tuzki-get-acount-state";
     var xhr = new XMLHttpRequest();
+    //AJAX 从服务器端获得数据
     xhr.open("GET",url,true);
+
 
     xhr.onreadystatechange = function(){
         //console.log("xhr.readyState=",xhr.readyState);
-        if(xhr.readyState == 4){
+        if(xhr.readyState == 4){//响应已完成
             //console.log(xhr.responseText);
-            var result = JSON.parse(xhr.responseText);
+            var result = JSON.parse(xhr.responseText);//字符串转化为JS对象
             var update_link = '';
             if(result.update == 'True'){
                 update_link = '<a href="' + domain + '/home" target="_blank"><span class="label label-important">新版本</span></a>';
             }
             if(result.code == '10'){
-                var hello = document.createElement("p");
+                var hello = document.createElement("p");//新的标签
                 hello.innerHTML = 'Hello,'+result.username + '!' + update_link;
 
                 var hello_div = document.getElementById('hello');
