@@ -54,6 +54,16 @@ references
 * 学习使用JavaScript工程命令行构建工具 grunt
 * 学习使用针对Web开发的包管理器 bower
 
+#### workflow:
+
+1. install node.js and npm
+2. install grunt by npm -- <a href="http://www.gruntjs.org/docs/getting-started.html#cli" target="_blank">hint</a>
+3. install bower by npm -- <a href="http://bower.io/#install-bower" target="_blank">hint</a>
+4. 如果第2、3两步你安装遇到问题，请问我
+5. 了解一下grunt和bower
+6. 周日和周一我和你一起在我们的项目中用到grunt和bower
+
+
 ### stage 3 -- 效率
 加速开发，让构建复杂应用更加轻松
 
