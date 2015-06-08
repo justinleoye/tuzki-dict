@@ -185,8 +185,8 @@ $(document).ready(function(){
             $('button[name=storesubmit] div[class=tooltip-inner]').append("正在写入单词本");
             //$('button[name=storesubmit] i').attr("class","icon-time");
             $('button[name=storesubmit] span').attr("class","glyphicon glyphicon-time");
-            var url = 'http://yeyuan.sinaapp.com/tuzki';
-            //var url = "http://localhost:8080/tuzki"
+            //var url = 'http://yeyuan.sinaapp.com/tuzki';
+            var url = "http://localhost:8080/tuzki"
             var xhr = new XMLHttpRequest();
             xhr.open("POST", url, true);
             //xhr.setRequestHeader("Cookie","not cool!");
