@@ -221,11 +221,11 @@ $(document).ready(function(){
 
     // tooltip for the store button
     $('button[name=storesubmit]').mouseover(function(){
-        $(this).tooltip('show');
+        //$(this).tooltip();
     });
     // tooltip for the wordsbook
     $('a[name=book]').mouseover(function(){
-        $(this).tooltip('show');
+        //$(this).tooltip();
     });
 });
 
@@ -278,8 +278,8 @@ function getCookie(domain, name, callback){
 //Q:'True' '10' '13'
 function checkLogin(){
     // get the cookie of the domain of the server
-    var domain = "http://yeyuan.sinaapp.com";
-    //var domain = "http://localhost:8080";
+    //var domain = "http://yeyuan.sinaapp.com";
+    var domain = "http://localhost:8080";
     var url = domain + "/tuzki-get-acount-state";
     var xhr = new XMLHttpRequest();
     //AJAX 从服务器端获得数据
