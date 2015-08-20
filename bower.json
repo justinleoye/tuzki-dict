@@ -1,0 +1,22 @@
+{
+  "name": "tuzki-dict",
+  "version": "0.0.0",
+  "homepage": "https://github.com/justinleoye/tuzki-dict",
+  "authors": [
+    "justinleoye@gmail.com"
+  ],
+  "description": "a Chinese English translation dictionary.",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "angular": "~1.4.1",
+    "angular-bootstrap": "~0.13.0"
+  }
+}

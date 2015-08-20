@@ -1,0 +1,30 @@
+{
+  "name": "traderLightChart",
+  "version": "0.0.0",
+  "main": "dist/traderLightChart.min.js",
+  "description": "a light chart for trader",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/justinleoye/traderLightChart.git"
+  },
+  "keywords": [],
+  "author": "Justin Leo ye",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-jade": "^0.14.1",
+    "grunt-contrib-jshint": "~0.6.4",
+    "grunt-contrib-less": "^1.0.1",
+    "grunt-contrib-qunit": "~0.3.0",
+    "grunt-contrib-uglify": "~0.2.4",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-jscs": "^1.8.0",
+    "grunt-karma": "^0.10.1",
+    "grunt-newer": "^1.1.0",
+    "grunt-serve": "^0.1.6",
+    "karma": "^0.12.32"
+  }
+}
