@@ -1,26 +1,26 @@
 var TuzkiDomain = "http://yeyuan.sinaapp.com/";
 //var TuzkiDomain = "http://localhost:8080/"
 
-console.log("content script insected!");
+//console.log("content script insected!");
 chrome.extension.onRequest.addListener(
     function(request, sender, sendResponse){
-        console.log("the sender id:",sender);
-        console.log("Request:",request);
+        //console.log("the sender id:",sender);
+        //console.log("Request:",request);
         var text = getSelectedTextFromPage().trim();
-        console.log("SelectedText:",text);
+        //console.log("SelectedText:",text);
         sendResponse({selectedText: text});
 });
 
 // from http://www.codebit.cn/javascript/get-selection.html
 // get the selected text in the page
 function getSelectedTextFromPage() {
-    console.log("getSelectedTextFromPage start...");
-    console.log(window.getSelection.toString());
+    //console.log("getSelectedTextFromPage start...");
+    //console.log(window.getSelection.toString());
 
     if(window.getSelection){
         // this technique is the most likely to be standardized.
         // getSelection() returns a Selection object
-        console.log(window.getSelection().toString());
+        //console.log(window.getSelection().toString());
         return window.getSelection().toString();
     } else if(document.getSelection){
         //this is an older,simpler technique that returns a string
@@ -42,7 +42,7 @@ String.prototype.trim = function() {
 
 // insect css file into page
 $(document).ready(function(){
-    console.log("css insect start...");
+    //console.log("css insect start...");
     var href = TuzkiDomain + "static/css/tuzki-content.css";
     var head = document.getElementsByTagName("head")[0];
     var link = document.createElement("link");
@@ -54,7 +54,7 @@ $(document).ready(function(){
 
 // reaction of the text-selection
 $(document).mouseup(function(event){
-    console.log("text selection reaction start");
+    //console.log("text selection reaction start");
     //console.log(event.pageX);
     setTimeout(getTranslation(event),500);
 
